@@ -176,7 +176,7 @@ $(document).ready(function()
 											
 										} 
 									}
-									else (
+									
 								}
 								/*
 								if ((content.length > 0) && (cursorPosition == 0))
