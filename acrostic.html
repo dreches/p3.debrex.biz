@@ -1,0 +1,248 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Acrostic</title>
+		<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+		<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+		<link rel="stylesheet" href="acrostic.css" type="text/css" />
+	</head>
+	<body>
+		<div id="quoted-source-div">
+		</div>
+		<div id="quote-div">
+		</div>
+		<h4 class= "instruction">Click on the clue letter to highlight the corresponding squares in the quote</h4>
+		<div id="clues-div">
+		</div>
+
+		<script>
+			/* This would ideally be read in from a JSON file but for now it is hardcoded as puzzle */
+			var puzzle = 
+			'{' +
+				'"acrostic" :' +
+				'{' +
+					'"quote": "ONE YEAR THE DIRECT-ACTION BARBIE LIBERATION ORGANIZATION SWITCHED THE VOICE CIRCUITS OF HUNDREDS OF DOLLS IN US STORES ON CHRISTMAS DAY SHE ASSERTED DEAD MEN TELL NO LIES WHILE GI JOE CAME OUT WITH MATH IS HARD LETS GO SHOPPING",'+
+					
+					'"width": "39", "height": "6",' +
+					'"clues" : [' +
+						'{"clue" : {' +
+							 '"letter": "A" , "hint" : "Typical asthma remedy",' +
+							 '"positions" : ["23","99","180","79","18","105","139","113","186","29","6","177","63","69"] ,' +
+							 '"answer" : "BRONCHODILATOR" }' +
+						'},' +
+						'{"clue" : {' +
+							 '"letter": "B" , "hint" : "former TV comedy-drama with Dick Van Patten (3 wds)",' +
+							 '"positions" : ["57","146","179","171","167","162","108","14","43","152","71","188","60"] ,' +
+							 '"answer" : "EIGHTISENOUGH" } ' +
+						'},' +
+						'{"clue" : {' +
+							 '"letter": "C" , "hint" : "1960 best song Oscar winner (3 wds)",' +
+							 '"positions" : ["133","10","62","125","13","75","138","51","159","38","83","111","115"] ,' +
+							 '"answer" : "NEVERONSUNDAY" }' +
+						'},' +
+						'{"clue" : {' +
+							 '"letter": "D" , "hint" : "hollow rock",' +
+							 '"positions" : ["41","61","158","80","142"] ,' +
+							 '"answer" : "GEODE" }' +
+						'},' +
+						'{"clue" : {' +
+							 '"letter": "E" , "hint" : "be in charge",' +
+							 '"positions" : ["49","86","76","150","55","64","119","19","3"] ,' +
+							 '"answer" : "OFFICIATE" }' +
+						'},' +
+						'{"clue" : {' +
+							 '"letter": "F" , "hint" : "Centaurs` opponents on the Elgin Marbles",' +
+							 '"positions" : ["89","155","184","20","134","9","74"] ,' +
+							 '"answer" : "LAPITHS" }' +
+						'},' +
+						'{"clue" : {' +
+							 '"letter": "G" , "hint" : "one opposed to official policy",' +
+							 '"positions" : ["174","48","112","178","53","126","5","93","16"] ,' +
+							 '"answer" : "DISSIDENT" }' +
+						'},' +
+						'{"clue" : {' +
+							 '"letter": "H" , "hint" : "passes that facilitate goals",' +
+							 '"positions" : ["42","96","170","68","143","109","84"] ,' +
+							 '"answer" : "ASSISTS" }' +
+						'},' +
+						'{"clue" : {' +
+							 '"letter": "I" , "hint" : "I.   English naturalist (1809-82; 2 wds)",' +
+							 '"positions" : ["104","77","166","40","136","153","91","130","114","173","52","30","103"] ,' +
+							 '"answer" : "CHARLESDARWIN" }' +
+						'},' +
+						'{"clue" : {' +
+							 '"letter": "J" , "hint" : "it can be pirate, ham, or old-time",' +
+							 '"positions" : ["25","46","58","169","1"] ,' +
+							 '"answer" : "RADIO" } ' +
+						'},' +
+						'{"clue" : {' +
+							 '"letter": "K" , "hint" : "belt specialist (2 wds)",' +
+							 '"positions" : ["135","8","117","28","140","156","32","7","110","172","187"] ,' +
+							 '"answer" : "ETHELMERMAN" }' +
+						'},' +
+						'{"clue" : {' +
+							 '"letter": "L" , "hint" : "surfs the web",' +
+							 '"positions" : ["26","123","21","161","95","157","101"] ,' +
+							 '"answer" : "BROWSES" }' +
+						'},' +
+						'{"clue" : {' +
+							 '"letter": "M" , "hint" : "animal with an exoskeleton and jointed appendages",' +
+							  '"positions" : ["129","81","163","145","33","98","185","85","87"] ,' +
+							 '"answer" : "ARTHROPOD" }' +
+			'				' +
+						'},' +
+						'{"clue" : {' +
+							 '"letter": "N" , "hint" : "woodboring beetle that makes a ticking sound",' +
+							 '"positions" : ["127","66","34","160","164","144","24","97","15","168"] ,' +
+							 '"answer" : "DEATHWATCH" }' +
+						'},' +
+						'{"clue" : {' +
+							 '"letter": "O" , "hint" : "blockade",' +
+							 '"positions" : ["116","44","82","149","100"] ,' +
+							 '"answer" : "SIEGE" } ' +
+						'},' +
+						'{"clue" : {' +
+							 '"letter": "P" , "hint" : " take a liking for (2 wds)",' +
+							 '"positions" : ["65","183","59","124","37","2","73","39"] ,' +
+							 '"answer" : "COTTONTO" }' +
+						'},' +
+						'{"clue" : {' +
+							 '"letter": "Q" , "hint" : "cause to be stationary",' +
+							 '"positions" : ["107","131","165","88","31","12","137","27","45","122"] ,' +
+							 '"answer" : "IMMOBILIZE" }' +
+						'},' +
+						'{"clue" : {' +
+							 '"letter": "R" , "hint" : "movement founded by Felix Adler (2 wds)",' +
+							 '"positions" : ["128","35","56","141","67","17","90","154","78","147","47","94","106","132"] ,' +
+							 '"answer" : "ETHICALCULTURE" }' +
+						'},' +
+						'{"clue" : {' +
+							 '"letter": "S" , "hint" : "Bazarov, the hero of Turgenev`s Fathers and Sons, for one",' +
+							 '"positions" : ["22","92","182","72","175","36","120","54"] ,' +
+							 '"answer" : "NIHILIST" }' +
+						'},' +
+						'{"clue" : {' +
+							 '"letter": "T" , "hint" : "yields",' +
+							 '"positions" : ["70","118","11","148","121"] ,' +
+							 '"answer" : "CEDES" }' +
+						'},' +
+						'{"clue" : {' +
+							 '"letter": "U" , "hint" : "takes pleasure in",' +
+							 '"positions" : ["176","50","151","102","4","181"] ,' +
+							 '"answer" : "ENJOYS" }' +
+						'}' +
+					']' +
+				'}' +
+			'}';
+
+			var obj = eval ("(" + puzzle + ")");
+			var quote = obj.acrostic.quote;
+			var clues = obj.acrostic.clues;
+			// start with a single null element in 0
+			var solution = [null];	
+			
+			console.log( "length = " + clues.length ); 
+			for (var i=0; i<clues.length; i++ ){
+				var clue = clues[i].clue;
+				console.log( "clue = " + clue.letter );
+				var clueID = clue.letter;
+				// Only want to deal with upper case characters
+				var answer = clue.answer;
+				var positions = clue.positions;
+				var $clueDiv = $("<div>", { class: "clue"});
+				$("#clues-div").append($clueDiv);
+				var $description = $("<p>").appendTo($clueDiv);
+				$description.text(clue.hint);
+				var $anchor = $("<a>", {id: "clue_"+clueID,
+									  href: "#",
+									  class: "clue_id"
+								});
+				$anchor.text(clueID + '.');
+				$description.prepend($anchor);
+				var $clueTable = $("<table>",{class: "clue "+clueID}).appendTo($clueDiv);
+				$clueInput = $("<tr>").appendTo($clueTable);
+				$cluePositions = $("<tr>",{class: "position"}).appendTo($clueTable);
+				for (var j=0; j < positions.length; j++) {
+					var position = positions[j];
+					// Store the solution text and clueID to be able to cross reference
+					// with the data in #quote
+					solution[position] = { "clue": clueID, "value": answer[j] };
+					$("<td>",{id: "tdc"+position}).appendTo($clueInput).html($("<input>",{id: "c"+position,
+																						type: "text",
+																						maxlength: "1",
+																						size: "1"}));
+					$("<td>",{class: "position"}).appendTo($cluePositions).text(position);
+					
+				}
+			} ;
+
+
+			/**********************************************************************************
+			Set up the grid containing the quote. Display any punctuation included in the clue
+			***********************************************************************************/
+			$quoteTable = $("<table>",{id: "quote"});
+			
+			for (h=0,i=0,s=0; h<obj.acrostic.height; h++)
+			{
+				$tr = $("<tr>");
+				for (w=0; w<obj.acrostic.width; w++)
+				{
+					$td=$("<td>").appendTo($tr);
+					var value;
+					var charCode;
+					if (i<quote.length)	{
+						value=quote[i];
+						charCode = quote.charCodeAt(i);
+						i++;
+						console.log("value:"+value + " ascii:"+charCode);
+						if ( charCode > 32 && (charCode<128)) {
+							
+							$ul = $("<ul>").appendTo($td);
+							$cluePosition = $("<li>").appendTo($ul);
+							$clueContent = $("<li>").appendTo($ul);
+							// Assumption that all characters are upper case
+							if (charCode>64 && (charCode<91))	{
+								// s will index into solutions
+								s++;
+								// Compare what we calculated from the clues and hopefully it matches the quote
+								// Otherwise the data is corrupt.
+								if (solution[s].value != value )
+									console.log("Data doesn't match at position " + s);
+								else {
+									$td.attr("id","tdq"+s);
+									$cluePosition.text(s);
+									// Indicate which link this belongs to
+									$clueContent.append($("<input>",{ class: solution[s].clue,	
+																	id: "q"+s,
+																	type: "text",
+																	maxlength: "1",
+																	size: "1"
+																	}));
+								}
+							}
+							else { 
+								// Punctuation will display in the puzzle
+								$clueContent.text(value);
+							}
+						}				
+					}				
+				}
+				$quoteTable.append($tr);
+			}
+			$("#quote-div").append($quoteTable);
+			
+			
+			for (var i=0; i<quote.length; i++)
+			{
+				value = quote[i];
+				if (value>64 && (value<91)) {
+				
+					//solution.push(value);
+				}
+			
+			}
+		</script>
+		<script src="acrostic.js"></script>
+	</body>
+</html>
+

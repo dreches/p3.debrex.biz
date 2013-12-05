@@ -1,0 +1,233 @@
+body{ 
+		font-family: sans-serif;
+	}
+	
+	#clues-div {
+		overflow-y: scrollable;
+		margin-right: 5%
+		margin-left: 5%;
+	}
+	
+	table{
+		border-collapse: collapse;
+		//table-layout: fixed;
+		text-align: center;
+		overflow-x: scrollable;
+		background-color: green;
+	}
+	td {
+		//padding: 0px;
+		//margin: 0px;
+		border: 1px black solid;
+		height: 1.5em;
+		min-height: 1.5em;
+		max-width: 3.2em;
+		min-width: 1.2em;
+		width: 1.2em;
+		padding-top: 0%;
+		//background-color: orange;
+	}
+	
+	ul {
+		list-style:none;
+		//border: thin solid green;
+		list-style-position:inside;
+
+		padding-left: 0px;
+		padding-right: 0px;
+		//width: 2em;
+		text-align: center;
+		margin: auto;
+		width: 100%;
+
+	}
+	ul *{
+		padding: 0px;
+	}
+	li {
+		//border: thin solid red;
+		padding: 0px;
+		padding-right: 0px;
+		margin: 0px 0px 0px 0px;
+		margin-left: 0px;
+		//min-width: 1.5em;
+		//width: 1.5em;
+		//line-height: 1em;
+		//font-size: 1em;
+		//height: 1em;
+		//font-weight: bold;
+	}
+	#quote ul{
+		background-color: white;
+	}
+	#quote li:first-child {
+		font-size: 60%;
+		font-family: sans-serif;
+		font-weight: bold;
+		padding-top: 1px;
+		height: 1em;
+		line-height: 100%;
+		background-color: white;
+		//background-color: cyan;
+		color: navy;
+		text-align: left;
+	}
+	/*
+	span{
+		margin:0px;
+	}
+	span.position{
+		padding: 0px;
+		margin: 0px;
+		
+		width: 70%;
+		min-width:70%;
+		//background-color: cyan;
+		//float: left;
+		//padding-left: .2em;
+
+	}
+	*/
+	span.clue_letter {
+		float: right;
+		min-width: .8em;
+		width : .8em;
+		padding-right: .2em;
+		//text-align:right;
+	}
+	tr.position {
+		//background-color: cyan;
+		font-weight: bold;
+		font-size: 60%;
+		//border-bottom: 0px;
+		//border-left: 0px;
+		//border-right: 0px;
+		//height: 1em;
+		
+	}
+
+	table.clue {
+		background-color: white;
+		border: 1px solid blue;
+		border-collapse: separate;
+		border-spacing: .3em 0em;
+		overflow-x: scrollable;
+	}
+	
+	a.clue_id{
+		display: block;
+		float: left;
+		min-width: 1em;
+		width: 2em;
+		//height: 2em;
+		background-color: orange;
+		font-weight: bold;
+		text-align: center;
+		border-bottom: 0px;
+		
+	}
+	a.clue_id {
+		//vertical-align: bottom;
+		//padding: .3em;
+		margin-right: .5em;
+		font-size: 110%;
+		padding: .2em .1em .2em .2em;
+	}
+	a.clue_id:active, a.clue_id:hover {
+		color: yellow;
+	}
+	a.clue_id:visited,a.clue_id:link {
+		color: black;
+		text-decoration: none;
+	}
+	div.clue p {
+		margin-top: 0px;
+		font-size: 90%;
+	
+	}
+	table.clue>caption {
+		font-size: 90%;
+	}
+
+	table#quote  ul{
+		font-weight: bold;
+	}
+	
+	table.clue td {
+		border: 0px;
+	}
+
+	tr.position>td {
+		background-color: cyan;
+		font-weight: bold;
+		font-family: sans-serif;
+		//padding: 0px;
+		text-align: left;
+	}
+
+
+	input{
+		//background-color: yellow;
+		//border: solid cyan 1px;
+		border: 0px;
+		padding: 0px 0px 0px 0px;
+		margin: 0px 0px 0px 0px;
+		letter-spacing: 0px;
+		text-align: center;
+		font-size: 1em;
+		min-width: 1.5em;
+		font-weight: bold;
+		line-height: 1em;
+		width : 100%;
+	}
+	
+
+	
+	table.clue input {
+		background-color: white;
+		border-bottom: black 1px solid;
+		width: 1.4em;
+		min-width: 1.4em;
+		line-height: 1.4em;
+		
+	}
+	
+	.instruction {
+		font-style: italic;
+		font-weight: normal;
+	}
+
+	#clues {
+
+		//display: inline;
+		width: 100%;
+		background-color: orange;
+	}
+
+	table input.highlight {
+		background-color:#FF9999;
+	}
+	
+	table input.display_bright {
+		background-color : #FFFF66;
+	}
+
+	div.clue{
+		border :orange 2px solid;
+		width: 45%;
+		//background-color: navy;
+		//display: in-line;
+		//float: left;
+		display: inline-block;
+	}
+
+	div.clue table>caption {
+		width: 100%;
+		text-align: left;
+	}
+
+	div.clue table {
+		//margin-left: 10%;
+		text-align: center;
+		//color: white;
+	}
