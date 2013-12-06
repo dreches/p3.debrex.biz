@@ -3,16 +3,20 @@ body{
 	}
 	
 	#clues-div {
-		overflow-y: scrollable;
+		overflow-y: scroll;
 		margin-right: 5%
 		margin-left: 5%;
+		height: 60%;
+	}
+	#quote-div  table{
+		overflow-x: scroll;
 	}
 	
 	table{
 		border-collapse: collapse;
 		//table-layout: fixed;
 		text-align: center;
-		overflow-x: scrollable;
+		overflow-x: scroll;
 		background-color: green;
 	}
 	td {
@@ -121,9 +125,10 @@ body{
 		width: 2em;
 		//height: 2em;
 		background-color: orange;
+		
 		font-weight: bold;
 		text-align: center;
-		border-bottom: 0px;
+		//border-bottom: 0px;
 		
 	}
 	a.clue_id {
@@ -132,6 +137,7 @@ body{
 		margin-right: .5em;
 		font-size: 110%;
 		padding: .2em .1em .2em .2em;
+		border-style: ridge green 3px;
 	}
 	a.clue_id:active, a.clue_id:hover {
 		color: yellow;
@@ -201,7 +207,7 @@ body{
 
 		//display: inline;
 		width: 100%;
-		background-color: orange;
+		//background-color: orange;
 	}
 
 	td .highlight {
@@ -216,7 +222,7 @@ body{
 	}
 
 	div.clue{
-		border :orange 2px solid;
+		//border :orange 2px solid;
 		width: 45%;
 		//background-color: navy;
 		//display: in-line;

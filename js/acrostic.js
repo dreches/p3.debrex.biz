@@ -70,20 +70,159 @@ function lastCursorPosition(pos){
 	 }
 })(jQuery);
 
-function idVal (idAttribute) {
-	if (!idAttribute) return 0;
-	if ( idAttribute.indexOf("td")> -1)
-		return Number(idAttribute.substr(3));
+function idVal (idTag) {
+	if (!idTag) return 0;
+	if ( idTag.indexOf("td")> -1)
+		return Number(idTag.substr(3));
 	else 
-		return Number(idAttribute.substr(2));
+		return Number(idTag.substr(2));
 }
 
-function idTag( idAttribute) {
-	if (!idAttribute) return NULL;
-	if ( idAttribute.indexOf("td")> -1)
-		return idAttribute.substr(0,3);
-	else return idAttribute.substr(0,2);
+function idPrefix( idTag) {
+	if (!idTag) return NULL;
+	if ( idTag.indexOf("td")> -1)
+		return idTag.substr(0,3);
+	else return idTag.substr(0,2);
 }
+
+function parentTdID( idTag) {
+	if (!idTag) return null;
+	else 
+		return idTag[0]+"td"+idVal(idTag);
+}
+
+function inClue(idTag)
+{
+	if (idTag) return (idTag.indexOf("c") > -1); 
+}
+
+function advanceCursor(currentID)
+{
+	if ( inClue(currentID))	{
+		// Get the container parent
+		var $parentTd = $("#"+ parentTdID(currentID));
+		var $next = $parentTd.next();
+		if ( $next.exists() ) return $next.find("input").first().attr("id");
+		else { // Go to the next clue	
+			var $nextParent = $parentTd.closest("div.clue").next();
+			if ($nextParent.exists)
+					return $nextParent.find("input").first().attr("id");
+			else return currentID;
+		}
+	}
+	else {
+		// For the inputs in quote, we can simply calculate the value of the next element
+		// Alternatively, it could have been calculated using the parent TD as well. I'm
+		// not sure which is the better approach
+		return 	idPrefix(currentID) + Math.min( idVal(currentID)+1,Solution().length-1);
+	}
+}
+function backspaceCursor(currentID)
+{
+	if ( inClue(currentID))	{
+		var $parentTd = $("#"+parentTdID(currentID));
+		var $prev = $parentTd.prev();
+		if ( $prev.exists() ) return $prev.find("input").first().attr("id");
+		else { // Go to the prev clue
+			var $prevParentDiv = $parentTd.closest("div.clue").prev();
+			if ($prevParentDiv.exists)
+					return $prevParentDiv.find("input").last().attr("id");
+			else return currentID;
+		}
+	}
+	else {
+		// For the inputs in quote, we can simply calculate the value of the next element
+		// Alternatively, it could have been calculated using the parent TD as well. I'm
+		// not sure which is the better approach
+		return idPrefix(currentID) + Math.max( idVal(currentID)-1,1);
+		
+	}
+}
+function goUp(currentID)
+{
+	var $parentTd = $("#"+parentTdID( currentID ));
+	var currentIndex = $parentTd.index();
+}
+function goDown(currentID)
+{
+	var $parentTd = $("#"+parentTdID( currentID ));
+	var currentIndex = $parentTd.index();
+}
+
+function moveCursor( arrowKey, currentID ) {
+	var $parentTd = $("#"+parentTdID( currentID ));
+	var currentIndex = $parentTd.index();
+	switch (arrowKey)	{
+		case 37:  // Go to previous input
+			//if (cursorPosition <= lastCursorPosition()) {
+				console.log("Going to previous input");
+				/*
+				currentKey = $(this).closest("td").attr("id");
+				prevKey=  "#" + currentKey.substring(0,3) + (Number(currentKey.substring(3))-1);
+				$(prevKey + " input").select();
+				*/
+				//currentID = $(this).attr("id");
+				previous = "#" + idPrefix(currentID) + Math.max( idVal(currentID)-1,1);
+				console.log("PreviousID="+previous);
+				//previousIndex = Math.max( 0, currentIndex-1);
+				//var previous = $("td").eq(previousIndex);
+				$(previous).select();
+				//console.log("SELECT: keywhich[" + arrowKey +"]");
+			//};
+			break;
+		case 39:  // Go to next input
+			//if (cursorPosition == 	lastCursorPosition()) {
+				console.log("Going to next input");
+				console.log("SELECT: keywhich[" + arrowKey +"]");
+				//currentKey = $(this).closest("td").attr("id");
+				//nextKey=  "#" + currentKey.substring(0,3) + (Number(currentKey.substring(3))+1);
+				//$(nextKey + " input").select();
+				//currentID = $(this).attr("id");
+				next = "#" + idPrefix(currentID) + Math.min( idVal(currentID)+1,Solution().length-1);
+				$(next).select();
+		
+			//};
+			break;
+		case 38 : // Go up a row
+			//$("#quote input:first").focus();
+			
+			var $tr = $(this).closest("tr").prev();
+			if ($tr.exists())
+			{
+				var currentIndex = $(this).closest("td").index();
+				console.log("index ="+currentIndex);
+				var aboveID = $($tr).children().eq(currentIndex).attr("id");
+				
+				if (aboveID)
+				{	
+					console.log("previousID=" + aboveID);
+					newID = "#"+aboveID;
+					$(newID + " input").select();
+				}
+				//$(previous + " input").select();
+			}
+			break;
+		case 40:  // Go down a row
+			//$("#quote input:last").focus();
+			var $tr = $(this).closest("tr").next();
+			if ($tr.exists())
+			{
+				var currentIndex = $(this).closest("td").index();
+				console.log("index ="+currentIndex);
+				var belowID = $($tr).children().eq(currentIndex).attr("id");
+				
+				if (belowID)
+				{	
+					console.log("nextID=" + belowID);
+					newID = "#" + belowID;
+					$(newID + " input").select();
+				}
+				//$(previous + " input").select();
+			}
+			break;
+	} 					
+}
+
 
 
 
@@ -102,7 +241,7 @@ $(document).ready(function()
 							},
 						focusin: function() {		
 							var startValue = $(this).val();
-							console.log("FOCUSIN: value=["+content+"]");				
+							//console.log("FOCUSIN: value=["+content+"]");				
 							lastCursorPosition($(this).getCursorPosition());
 							var id = $(this).attr("id");
 							var selector = "[id$=i"+idVal(id)+"]";
@@ -130,7 +269,8 @@ $(document).ready(function()
 							var id = $(this).attr("id");
 							var selector = "[id$=i"+idVal(id)+"]";
 							var $currentInputs = $("input"+selector);
-							var highlighted = $( "table input.highlight_text");
+							//var highlighted = $( "table input.highlight_text");
+							// dehighlight previously highlighted texts
 							$( "table input.highlight_text").toggleClass("highlight_text",false);
 							if (startValue != keyValue) {
 								$currentInputs.toggleClass("highlight_text",true);
@@ -161,10 +301,39 @@ $(document).ready(function()
 								console.log("SELECT");
 								$(this).css("color","#660066");
 							},
+													
+						keydown : function(event) {
+							var content = $(this)[0].value;
+							var whichKey = event.which;
+							var cursorPosition = $(this).getCursorPosition();
+							
+							console.log( "KEYDOWN: content = <" + content +"> caret = <" +  cursorPosition + "> keywhich[" + whichKey +"]");
+							//};
+							/*
+							if (whichKey >64 && (whichKey < 91) )
+							{
+									
+								if(cursorPosition > 0 )
+								{
+									//lastCursorPosition( -1);
+									//$(this).get(0).focus();
+									console.log("Go to the next input field");
+									currentKey = $(this).closest("td").attr("id");
+									nextKey=  "#" + currentKey.substring(0,3) + (Number(currentKey.substring(3))+1);
+									$(nextKey + " input").select();
+									
+									
+								} 
+								
+							}
+							*/
+							lastCursorPosition(cursorPosition);
+						}
+						
 					}, "input" );	
 	
 
-	$("table#quote").on({ 	
+	$("table#quote,table.clue").on({ 	
 							
 							
 							keyup : function(event) {
@@ -180,17 +349,10 @@ $(document).ready(function()
 									{
 										case 37: 
 											//if (cursorPosition <= lastCursorPosition()) {
-												console.log("Going to previous input");
-												/*
-												currentKey = $(this).closest("td").attr("id");
-												prevKey=  "#" + currentKey.substring(0,3) + (Number(currentKey.substring(3))-1);
-												$(prevKey + " input").select();
-												*/
-												currentID = $(this).attr("id");
-												previous = "#" + idTag(currentID) + Math.max( idVal(currentID)-1,1);
+												console.log("Going to previous input");									
+												
+												previous = "#" +  backspaceCursor($(this).attr("id"));
 												console.log("PreviousID="+previous);
-												//previousIndex = Math.max( 0, currentIndex-1);
-												//var previous = $("td").eq(previousIndex);
 												$(previous).select();
 												//console.log("SELECT: keywhich[" + whichKey +"]");
 											//};
@@ -202,10 +364,13 @@ $(document).ready(function()
 												//currentKey = $(this).closest("td").attr("id");
 												//nextKey=  "#" + currentKey.substring(0,3) + (Number(currentKey.substring(3))+1);
 												//$(nextKey + " input").select();
+												/************
 												currentID = $(this).attr("id");
-												next = "#" + idTag(currentID) + Math.min( idVal(currentID)+1,Solution().length-1);
+												next = "#" + idPrefix(currentID) + Math.min( idVal(currentID)+1,Solution().length-1);
+												
+												***************/
+												next = "#"+advanceCursor($(this).attr("id"));
 												$(next).select();
-										
 											//};
 											break;
 										case 38 :
@@ -249,25 +414,27 @@ $(document).ready(function()
 								else 
 								{
 									var keyValue = $(this).val().toUpperCase;
+									if(cursorPosition > 0 )
 									
-									if ((whichKey >64 && (whichKey < 91)) || (whichKey > 96 && (whichKey < 123)))
 									{
 											
-										if(cursorPosition > 0 )
+										if ((whichKey >64 && (whichKey < 91)) || (whichKey > 96 && (whichKey < 123)))
 										{
 											//lastCursorPosition( -1);
 											//$(this).get(0).focus();
 											console.log("Go to the next input field");
-											currentID = $(this).closest("td").attr("id");
-											nextKey=  "#" + idTag(currentID) + Math.min(idVal(currentID)+1,Solution().length-1)	;
+											//currentID = $(this).closest("td").attr("id");
+											nextKey=  "#" + advanceCursor($(this).attr("id"));
 											
-											$(nextKey + " input").select();
-											
+											$(nextKey).select();							
 											
 										} 
-									}
-									else $(this).select();
 									
+										else {
+											// Don't allow other characters
+											$(this).select();
+										}
+									}	
 								}
 								/*
 								if ((content.length > 0) && (cursorPosition == 0))
@@ -277,33 +444,6 @@ $(document).ready(function()
 								*/
 								
 								//console.log("KEYUP: content = <" + content +"> caret = " + $(this).getCursorPosition());	
-							},
-							keydown : function(event) {
-								var content = $(this)[0].value;
-								var whichKey = event.which;
-								var cursorPosition = $(this).getCursorPosition();
-								
-								console.log( "KEYDOWN: content = <" + content +"> caret = <" +  cursorPosition + "> keywhich[" + whichKey +"]");
-								//};
-								/*
-								if (whichKey >64 && (whichKey < 91) )
-								{
-										
-									if(cursorPosition > 0 )
-									{
-										//lastCursorPosition( -1);
-										//$(this).get(0).focus();
-										console.log("Go to the next input field");
-										currentKey = $(this).closest("td").attr("id");
-										nextKey=  "#" + currentKey.substring(0,3) + (Number(currentKey.substring(3))+1);
-										$(nextKey + " input").select();
-										
-										
-									} 
-									
-								}
-								*/
-								lastCursorPosition(cursorPosition);
 							},
 							
 							keypress : function(event){

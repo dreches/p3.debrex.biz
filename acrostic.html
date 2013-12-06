@@ -135,7 +135,9 @@
 				'}' +
 			'}';
 			
-			
+			/*  I understand the eval method is problematic for security, but for this
+			    single example it did what I needed.
+			*/
 			var obj = eval ("(" + puzzle + ")");
 			var quote = obj.acrostic.quote;
 			var clues = obj.acrostic.clues;
@@ -172,7 +174,7 @@
 					// Store the solution text and clueID to be able to cross reference
 					// with the data in #quote
 					solution[position] = { "clue": clueID, "value": answer[j] };
-					$("<td>",{id: "tdc"+position}).appendTo($clueInput).html($("<input>",{id: "ci"+position,
+					$("<td>",{id: "ctd"+position}).appendTo($clueInput).html($("<input>",{id: "ci"+position,
 																						type: "text",
 																						maxlength: "1",
 																						size: "1"}));
@@ -214,7 +216,7 @@
 								if (solution[s].value != value )
 									console.log("Data doesn't match at position " + s);
 								else {
-									$td.attr("id","tdq"+s);
+									$td.attr("id","qtd"+s);
 									$cluePosition.text(s);
 									// Indicate which link this belongs to
 									$clueContent.append($("<input>",{ class: solution[s].clue,	
