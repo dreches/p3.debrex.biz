@@ -4,7 +4,7 @@
 		<title>Acrostic</title>
 		<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 		<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-		<link rel="stylesheet" href="acrostic.css" type="text/css" />
+		<link rel="stylesheet" href="css/acrostic.css" type="text/css" />
 	</head>
 	<body>
 		<div id="quoted-source-div">
@@ -134,17 +134,22 @@
 					']' +
 				'}' +
 			'}';
-
+			
+			
 			var obj = eval ("(" + puzzle + ")");
 			var quote = obj.acrostic.quote;
 			var clues = obj.acrostic.clues;
 			// start with a single null element in 0
 			var solution = [null];	
+			function Solution() {
+				this.solution = solution;
+				return this.solution;
+			}
 			
 			console.log( "length = " + clues.length ); 
 			for (var i=0; i<clues.length; i++ ){
 				var clue = clues[i].clue;
-				console.log( "clue = " + clue.letter );
+				//console.log( "clue = " + clue.letter );
 				var clueID = clue.letter;
 				// Only want to deal with upper case characters
 				var answer = clue.answer;
@@ -167,7 +172,7 @@
 					// Store the solution text and clueID to be able to cross reference
 					// with the data in #quote
 					solution[position] = { "clue": clueID, "value": answer[j] };
-					$("<td>",{id: "tdc"+position}).appendTo($clueInput).html($("<input>",{id: "c"+position,
+					$("<td>",{id: "tdc"+position}).appendTo($clueInput).html($("<input>",{id: "ci"+position,
 																						type: "text",
 																						maxlength: "1",
 																						size: "1"}));
@@ -194,7 +199,7 @@
 						value=quote[i];
 						charCode = quote.charCodeAt(i);
 						i++;
-						console.log("value:"+value + " ascii:"+charCode);
+						//console.log("value:"+value + " ascii:"+charCode);
 						if ( charCode > 32 && (charCode<128)) {
 							
 							$ul = $("<ul>").appendTo($td);
@@ -213,7 +218,7 @@
 									$cluePosition.text(s);
 									// Indicate which link this belongs to
 									$clueContent.append($("<input>",{ class: solution[s].clue,	
-																	id: "q"+s,
+																	id: "qi"+s,
 																	type: "text",
 																	maxlength: "1",
 																	size: "1"
@@ -241,8 +246,9 @@
 				}
 			
 			}
+			//alert(Solution().length);
 		</script>
-		<script src="acrostic.js"></script>
+		<script src="js/acrostic.js"></script>
 	</body>
 </html>
 

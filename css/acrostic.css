@@ -184,7 +184,7 @@ body{
 
 	
 	table.clue input {
-		background-color: white;
+		//background-color: white;
 		border-bottom: black 1px solid;
 		width: 1.4em;
 		min-width: 1.4em;
@@ -204,11 +204,14 @@ body{
 		background-color: orange;
 	}
 
-	table input.highlight {
+	td .highlight {
 		background-color:#FF9999;
 	}
+	input.highlight_text {
+		color: #CC0000;
+	}
 	
-	table input.display_bright {
+	table .display_bright {
 		background-color : #FFFF66;
 	}
 
