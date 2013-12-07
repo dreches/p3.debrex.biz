@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Acrostic</title>
+	
+	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+	<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+	<style>
+            div.x,div.y{width:50px;height:50px;background-color:blue;margin-top:20px; margin-bottom:20px;margin-right:20px;float:left;cursor:pointer;}
+            .x {background-color:yellow;}
+			
+			
+		body{ 
+			font-family: sans-serif;
+		}
+		
+		
+		
+		table{
+			border-collapse: collapse;
+			//table-layout: fixed;
+			text-align: center;
+			overflow-x: scrollable;
+			background-color: green;
+		}
+		td {
+			//padding: 0px;
+			//margin: 0px;
+			border: 1px black solid;
+			height: 1.5em;
+			min-height: 1.5em;
+			max-width: 3.2em;
+			min-width: 1.2em;
+			width: 1.2em;
+			padding-top: 0%;
+			//background-color: orange;
+		}
+
+		ul {
+			list-style:none;
+			//border: thin solid green;
+			list-style-position:inside;
+
+			padding-left: 0px;
+			padding-right: 0px;
+			//width: 2em;
+			text-align: center;
+			margin: auto;
+			width: 100%;
+
+		}
+		ul *{
+			padding: 0px;
+		}
+		li {
+			//border: thin solid red;
+			padding: 0px;
+			padding-right: 0px;
+			margin: 0px 0px 0px 0px;
+			margin-left: 0px;
+			//min-width: 1.5em;
+			//width: 1.5em;
+			//line-height: 1em;
+			//font-size: 1em;
+			//height: 1em;
+			//font-weight: bold;
+		}
+		
+			#quote li:first-child {
+			font-size: 60%;
+			font-family: sans-serif;
+			font-weight: bold;
+			padding-top: 1px;
+			//height: 1em;
+			line-height: 100%;
+			//background-color: white;
+			background-color: cyan;
+			text-align: left;
+		}
+		span{
+			margin:0px;
+		}
+		span.position{
+			padding: 0px;
+			margin: 0px;
+			
+			width: 70%;
+			min-width:70%;
+			//background-color: cyan;
+			//float: left;
+			//padding-left: .2em;
+
+		}
+		span.clue_letter {
+			float: right;
+			min-width: .8em;
+			width : .8em;
+			padding-right: .2em;
+			//text-align:right;
+		}
+		tr.position {
+			//background-color: cyan;
+			font-weight: bold;
+			font-size: 60%;
+			//border-bottom: 0px;
+			//border-left: 0px;
+			//border-right: 0px;
+			//height: 1em;
+			
+		}
+
+		table.clue {
+			background-color: white;
+			border: 1px solid blue;
+			border-collapse: separate;
+			border-spacing: .3em 0em;
+			overflow-x: scrollable;
+		}
+		
+		a.clue_id{
+			display: block;
+			float: left;
+			min-width: 1em;
+			width: 2em;
+			//height: 2em;
+			background-color: orange;
+			font-weight: bold;
+			text-align: center;
+			border-bottom: 0px;
+			
+		}
+		a.clue_id:active, a.clue_id:hover {
+			color: yellow;
+		}
+		a.clue_id:visited,a.clue_id:link {
+			color: black;
+			text-decoration: none;
+		}
+		
+		table.clue>caption {
+			font-size: 90%;
+		}
+	
+		
+		#clues { width: 100%;
+		}
+
+		table.clue td {
+			border: 0px;
+		}
+
+		tr.position>td {
+			background-color: cyan;
+			font-weight: bold;
+			font-family: sans-serif;
+			//padding: 0px;
+			text-align: left;
+		}
+
+
+		input{
+			//background-color: yellow;
+			//border: solid cyan 1px;
+			border: 0px;
+			padding: 0px 0px 0px 0px;
+			margin: 0px 0px 0px 0px;
+			letter-spacing: 0px;
+			text-align: center;
+			font-size: 1em;
+			min-width: 1.5em;
+			font-weight: bold;
+			line-height: 1em;
+			width : 100%;
+		}
+		
+	
+		
+		table.clue input {
+			background-color: white;
+			border-bottom: black 1px solid;
+			width: 1.4em;
+			min-width: 1.4em;
+			line-height: 1.4em;
+			
+		}
+
+		#clues {
+
+			//display: inline;
+			width: 100%;
+			background-color: orange;
+		}
+
+		table input.highlight {
+			background-color:#FF9999;
+		}
+		
+		table input.display_bright {
+			background-color : #FFFF66;
+		}
+
+		div.clue{
+			border :orange 2px solid;
+			width: 45%;
+			//background-color: navy;
+			//display: in-line;
+			//float: left;
+			display: inline-block;
+		}
+
+		div.clue table>caption {
+			width: 100%;
+			text-align: left;
+		}
+
+		div.clue table {
+			margin-left: 10%;
+			text-align: center;
+			//color: white;
+		}
+     </style>
+	
+</head>
+<body>
+
+	
+
+<p>This text contains <sub>subscript</sub> text.</p>
+<p>This text contains <sup>superscript</sup> text.</p>
+<div id="quote-div">
+	<table id="quote">
+		<tr>
+			<td id="tdq1"><ul><li><span class="clue_letter">A</span><span class="position">3</span></li><li><input type="text" maxlength="1" size="1"/></li></ul></td>
+			<td id="tdq2"><input type="text" maxlength="1" size="1"/></td>
+			<td><input type="text" maxlength="1" size="1"/></td>
+			<td><ul><li><span class="clue_letter">A</span><span class="position">3</span></li><li class="A"><input type="text" maxlength="1" size="1"/></li></ul></td>
+			<td><input type="text" maxlength="1" size="1"/></td>
+			<td><input type="text" maxlength="1" size="1"/></td>
+			<td><ul><li><span class="clue_letter">A</span><span class="position">3</span></li><li><input type="text" maxlength="1" size="1"/></li></ul></td>
+			<td><input type="text" maxlength="1" size="1"/></td>
+			<td><input type="text" maxlength="1" size="1"/></td>
+			<td><ul><li><span class="clue_letter">A</span><span class="position">3</span></li><li><input type="text" maxlength="1" size="1"/></li></ul></td>
+			<td><input type="text" maxlength="1" size="1"/></td>
+			<td><input type="text" maxlength="1" size="1"/></td>
+			<td><ul><li><span class="clue_letter">A</span><span class="position">3</span></li><li><input class="A" type="text" maxlength="1" size="1"/></li></ul></td>
+			<td><input type="text" maxlength="1" size="1"/></td>
+			<td><input type="text" maxlength="1" size="1"/></td>
+			<td><ul><li><span class="clue_letter">A</span><span class="position">3</span></li><li><input type="text" maxlength="1" size="1"/></li></ul></td>
+			<td><input type="text" maxlength="1" size="1"/></td>
+			<td><input type="text" maxlength="1" size="1"/></td>
+			<td><ul><li><span class="clue_letter">A</span><span class="position">3</span></li><li><input type="text" maxlength="1" size="1"/></li></ul></td>
+			<td><input type="text" maxlength="1" size="1"/></td>
+			<td><input type="text" maxlength="1" size="1"/></td>
+			<td><ul><li><span class="clue_letter">A</span><span class="position">3</span></li><li><input type="text" maxlength="1" size="1"/></li></ul></td>
+			<td><input type="text" maxlength="1" size="1"/></td>
+			<td><input type="text" maxlength="1" size="1"/></td>
+			<td><ul><li><span class="clue_letter">A</span><span class="position">3</span></li><li><input class="A" type="text" maxlength="1" size="1"/></li></ul></td>
+			<td><input type="text" maxlength="1" size="1"/></td>
+			<td><input type="text" maxlength="1" size="1"/></td>
+			<td><ul><li><span class="clue_letter">A</span><span class="position">3</span></li><li><input type="text" maxlength="1" size="1"/></li></ul></td>
+			<td><input type="text" maxlength="1" size="1"/></td>
+			<td><input type="text" maxlength="1" size="1"/></td>
+			<td><ul><li><span class="clue_letter">A</span><span class="position">3</span></li><li><input type="text" maxlength="1" size="1"/></li></ul></td>
+			<td><input type="text" maxlength="1" size="1"/></td>
+			<td><input type="text" maxlength="1" size="1"/></td>
+			<td><ul><li><span class="clue_letter">A</span><span class="position">3</span></li><li><input type="text" maxlength="1" size="1"/></li></ul></td>
+			<td><input type="text" maxlength="1" size="1"/></td>
+			<td><input type="text" maxlength="1" size="1" value="Z"/></td>
+			<td><ul><li><span class="clue_letter">A</span><span class="position">3</span></li><li><input type="text" maxlength="1" size="1"/></li></ul></td>
+			<td><input type="text" maxlength="1" size="1"/></td>
+			<td><input type="text" maxlength="1" size="1" value="Z"/></td>
+		</tr>
+		<tr>
+			<td><ul><li><span class="clue_letter">A</span><span class="position">10</span></li><li><input type="text" maxlength="1" size="1"/></li></ul></td>
+			<td><input type="text" maxlength="1" size="1"/></td>
+			<td><input type="text" maxlength="1" size="1"/></td>
+			<td><ul><li><span class="clue_letter">Q</span><span class="position">203</span></li><li><input type="text" maxlength="1" size="1"/></li></ul></td>
+			<td><input type="text" maxlength="1" size="1"/></td>
+			<td><input type="text" maxlength="1" size="1" value="Z"/></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+
+	</table>
+</div>
+<br><br>
+<div id = "clues-div">
+
+	<div class="clue A" >
+		
+		<table class="clue A">
+			<caption><a href="#" id="A" class="clue_id">A.</a>a common asthmatic treatment</caption>
+			<tr>
+				<td><input type="text" maxlength="1" size="1"/></td>
+				<td><input type="text" maxlength="1" size="1"/></td>
+				<td><input type="text" maxlength="1" size="1"/></td>
+				<td><input type="text" maxlength="1" size="1"/></td>
+				<td><input type="text" maxlength="1" size="1"/></td>
+				<td><input type="text" maxlength="1" size="1"/></td>
+				<td><input type="text" maxlength="1" size="1"/></td>
+				<td><input type="text" maxlength="1" size="1"/></td>
+				<td><input type="text" maxlength="1" size="1"/></td>
+				<td><input type="text" maxlength="1" size="1"/></td>
+				<td><input type="text" maxlength="1" size="1"/></td>
+				<td><input type="text" maxlength="1" size="1"/></td>
+				<td><input type="text" maxlength="1" size="1"/></td>
+				<td><input type="text" maxlength="1" size="1"/></td>
+				<td><input type="text" maxlength="1" size="1"/></td>
+			</tr>
+			<tr class="position">
+				<td class="position">3</td>
+				<td class="position">20</td>
+				<td class="position">99</td>
+				<td class="position">3</td>
+				<td class="position">20</td>
+				<td class="position">99</td>
+				<td class="position">3</td>
+				<td class="position">20</td>
+				<td class="position">99</td>
+				<td class="position">3</td>
+				<td class="position">20</td>
+				<td class="position">99</td>
+				<td class="position">3</td>
+				<td class="position">20</td>
+				<td class="position">99</td>
+				
+			</tr>
+		</table>
+	</div>
+	<div class="clue">
+		<table class="clue B">
+			<caption>B. a common asthmatic treatment</caption>
+			<tr>
+				<td><input type="text" maxlength="1" size="1"/></td>
+				<td><input type="text" maxlength="1" size="1"/></td>
+				<td><input type="text" maxlength="1" size="1"/></td>
+				<td><input type="text" maxlength="1" size="1"/></td>
+				<td><input type="text" maxlength="1" size="1"/></td>
+				<td><input type="text" maxlength="1" size="1"/></td>
+			</tr>
+			<tr class="position">
+				<td class="position">3</td>
+				<td class="position">55</td>
+				<td class="position">126</td>
+				<td class="position">3</td>
+				<td class="position">55</td>
+				<td class="position">126</td>
+				
+			</tr>
+		</table>
+	</div>
+	<div class="clue">
+		<table class="clue  C">
+			<caption>C. this is a very long clue to see what happens when you have a very long clue</caption>
+			<tr>
+				<td><input type="text" maxlength="1" size="1"/></td>
+				<td><input type="text" maxlength="1" size="1"/></td>
+				<td><input type="text" maxlength="1" size="1"/></td>
+				<td><input type="text" maxlength="1" size="1"/></td>
+				<td><input type="text" maxlength="1" size="1"/></td>
+				<td><input type="text" maxlength="1" size="1"/></td>
+				<td><input type="text" maxlength="1" size="1"/></td>
+			</tr>
+			<tr class="position">
+				<td class="position">3</td>
+				<td class="position">55</td>
+				<td class="position">126</td>
+				<td class="position">3</td>
+				<td class="position">55</td>
+				<td class="position">126</td>
+				<td class="position">126</td>
+				
+			</tr>
+		</table>
+	</div>
+
+</div>
+
+<div id="alain-example">
+	<div class="y alain" id="1"></div>
+	<div class="y alain" id="2"></div>
+	<div class = "y alain" id="3"></div>
+	
+	<div class="x alain" id="a_1"></div>
+	<div class="x alain" id="a_2"></div>
+	<div class="x alain" id="a_3"></div>
+ </div> 
+				
+    <script>
+			
+		function toggleHighlight (el) {
+			el.toggleClass("highlight");
+		};
+		
+		
+		function Select (input) {
+			//var input = document.getElementById ("myText");
+			if ('selectionStart' in input) {
+				if(input.selectionStart > 0)
+				{
+					console.log( "caret postion: "+ input.selectionStart );
+					input.selectionStart = 0;
+					input.selectionEnd = 1;
+					input.focus ();
+				}
+			}
+			else {  // Internet Explorer before version 9
+				var inputRange = input.createTextRange ();
+				inputRange.moveStart ("character", 0);
+				inputRange.collapse ();
+				inputRange.moveEnd ("character", 1);
+				inputRange.select ();
+			}
+			//var position = window.getSelection().getRangeAt(0).startOffset;
+        };
+
+		function getSelectionStart(o) {
+			if (o.createTextRange) {
+				var r = document.selection.createRange().duplicate();
+				r.moveEnd('character', o.value.length);
+				if (r.text == '') return o.value.length;
+					return o.value.lastIndexOf(r.text);
+			} else return o.selectionStart;
+		};
+
+		function getSelectionEnd(o) {
+			if (o.createTextRange) {
+				var r = document.selection.createRange().duplicate();
+				r.moveStart('character', -o.value.length);
+				return r.text.length;
+			} else return o.selectionEnd;
+		};
+
+		(function($) {
+			$.fn.getCursorPosition = function() {
+				var input = this.get(0);
+				if (!input) return; // No (input) element found
+				if (document.selection) {
+					// IE
+				   input.focus();
+				}
+				return 'selectionStart' in input ? input.selectionStart:
+				'' || Math.abs(document.selection.createRange().moveStart('character', -input.value.length));
+			 }
+		})(jQuery);
+		
+		function lastCursorPosition(pos){
+			
+			if (!pos) return (this.lastpos || -2);
+			else this.lastpos = pos;
+			return this.lastpos;
+		};	
+		
+		$(document).ready(function()
+		{
+			$("table.clue a.clue_id").on("click", function() {
+				var selected = $( "table input.display_bright");
+				selected.toggleClass("display_bright",false);
+				$("table#quote input."+$(this).attr("id")).toggleClass("display_bright",true);
+			});
+			$( "table" ).on( "focusin", "input", function() {
+				//alert( $( this ).text() );
+				//$(this).css("background-color","red");
+				$(this).toggleClass("highlight");
+				console.log("FOCUSIN: value=["+$(this)[0].value+"]");
+			});
+			$("table#quote").on({ 	click: function() {
+										this.select();
+									},
+									focusin: function() {
+										var content = $(this)[0].value;
+										lastCursorPosition(-1);
+										/*
+										if (content.length > 0)
+										{	
+											//$(this).get(0).focus();
+											$(this).select();
+										};*/
+									},
+									
+									focusout: function() {
+										$(this).toggleClass("highlight");
+										//console.log("focusout event");
+										$(this).css("color","black");
+									},
+									change: function() {
+										// First, dehighlight previously highlighted entries
+										var selected = $( "table input.display_bright");
+										selected.toggleClass("display_bright",false);
+										$(this).toggleClass("display_bright");
+										//$(this).css("background-color","#FFFF66");
+										//$(this).fadeout(2000);
+										
+										console.log("change event");
+									},
+									select: function() {
+										console.log("SELECT");
+										$(this).css("color","red");
+									},
+									keyup : function(event) {
+										var content = $(this)[0].value;
+										var whichKey = event.which;
+										var cursorPosition = $(this).getCursorPosition();
+										// treat character keys as arrows
+										if( whichKey >= 37 && (whichKey <= 39) ){
+											switch (whichKey)
+											{
+												case 37: 
+													if (cursorPosition == lastCursorPosition()) {
+														console.log("Going to previous input");
+														//console.log("SELECT: keywhich[" + whichKey +"]");
+													};
+													break;
+												case 39:
+													if (cursorPosition == lastCursorPosition()) {
+														console.log("Going to next input");
+														console.log("SELECT: keywhich[" + whichKey +"]");
+													};
+													break;
+												case 38 :
+													$("#quote input:first").focus();
+													break;
+												case 40:
+													$("#quote input:last").focus();
+													break;
+											} 							
+										}
+										if ((content.length > 0) && (cursorPosition == 0))
+										{
+											$(this).select();
+										}
+										
+										
+										//console.log("KEYUP: content = <" + content +"> caret = " + $(this).getCursorPosition());	
+									},
+									keydown : function(event) {
+										var content = $(this)[0].value;
+										var whichKey = event.which;
+										var cursorPosition = $(this).getCursorPosition();
+										
+										console.log( "KEYDOWN: content = <" + content +"> caret = <" +  cursorPosition + "> keywhich[" + whichKey +"]");
+										//};
+										if (whichKey >64 && (whichKey < 91) )
+										{
+												
+											if(cursorPosition > 0 )
+											{
+												//lastCursorPosition( -1);
+												//$(this).get(0).focus();
+												console.log("Go to the next input field");
+												$(this).closest("t
+												
+											} 
+											
+										}
+										lastCursorPosition(cursorPosition);
+									},
+									
+									keypress : function(event){
+										var whichKey = event.which;
+										console.log("KEYPRESS=>keycode["+event.keyCode+"] keywhich[" + whichKey) +"]";
+									}						
+								},
+								"input");
+		});
+					
+				
+	
+					
+		
+		divs = document.getElementsByClassName("alain");
+		for (i=0;i<divs.length;i++) {
+			divs[i].addEventListener("click",function() {
+				id = this.id;
+				if (id.indexOf("a_") > -1) {
+					id = id.replace("a_","");
+					x =  document.getElementById(id);
+					x.style.backgroundColor = "green";                    
+				} else {
+					x =  document.getElementById("a_" + id);
+					x.style.backgroundColor = "red";
+				}
+			});
+		}
+        </script>
+    </body>
+
+</html>
