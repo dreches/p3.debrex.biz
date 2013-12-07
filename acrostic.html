@@ -7,11 +7,16 @@
 		<link rel="stylesheet" href="css/acrostic.css" type="text/css" />
 	</head>
 	<body>
-		<div id="quoted-source-div">
-		</div>
+		<h4 class= "instruction">Solve the puzzle by filling in the clues. Each numbered clue letter corresponds to a square in the grid above.
+		A letter entered in either square will populate the other square.  The grid represents a quote, and the first letter of each clue will spell out the
+		source of the quote.<br/>
+		You can use the arrow or tab keys to navigate (the tabs give default behavior). The up and down arrow keys will move you up or down a row.
+		The right and left arrows behave as expected. The space bar will advance you without erasing the existing input.	
+		 </h4>
+	
 		<div id="quote-div">
 		</div>
-		<h4 class= "instruction">Click on the clue letter to highlight the corresponding squares in the quote</h4>
+		<h4 class= "instruction">Click on the clue letter to highlight the corresponding squares in the quote. Use the up/down arrows to go to the prior/next clues</h4>
 		<div id="clues-div">
 		</div>
 
@@ -159,7 +164,8 @@
 				var $clueDiv = $("<div>", { class: "clue"});
 				$("#clues-div").append($clueDiv);
 				var $description = $("<p>").appendTo($clueDiv);
-				$description.text(clue.hint);
+				$("<span>",{class:"hint"}).appendTo($description).text(clue.hint);
+				//$description.text(clue.hint);
 				var $anchor = $("<a>", {id: "clue_"+clueID,
 									  href: "#",
 									  class: "clue_id"
@@ -217,6 +223,7 @@
 									console.log("Data doesn't match at position " + s);
 								else {
 									$td.attr("id","qtd"+s);
+									$cluePosition.attr("class", "link_"+solution[s].clue);
 									$cluePosition.text(s);
 									// Indicate which link this belongs to
 									$clueContent.append($("<input>",{ class: solution[s].clue,	

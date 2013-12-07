@@ -91,6 +91,12 @@ function parentTdID( idTag) {
 		return idTag[0]+"td"+idVal(idTag);
 }
 
+function inputID( idTag) {
+	if (!idTag) return null;
+	else 
+		return idTag[0]+"i"+idVal(idTag);
+}
+
 function inClue(idTag)
 {
 	if (idTag) return (idTag.indexOf("c") > -1); 
@@ -138,15 +144,67 @@ function backspaceCursor(currentID)
 		
 	}
 }
-function goUp(currentID)
+function moveUp(currentID)
 {
 	var $parentTd = $("#"+parentTdID( currentID ));
 	var currentIndex = $parentTd.index();
+	var newID;
+	if ( inClue(currentID) )
+	{
+		$priorClue = $parentTd.closest("div.clue").prev();
+		if ($priorClue.exists()) {
+			console.log("got prior clue");
+			// get the id of the TD element to be consistent with the other case
+			newID = $priorClue.find("td").first().attr("id");
+			console.log("newID="+newID);
+		}		
+	
+	}
+	else {
+		// move up a row in the quote (but will only work if there is an input field)
+		var $priorRow = $parentTd.closest("tr").prev();
+		if ($priorRow.exists())
+		{
+			console.log("index ="+currentIndex);
+			newID = $priorRow.children().eq(currentIndex).attr("id");		
+			
+		}
+		
+	}
+	// Returning the id of the TD element to be consistent across both
+		if (newID) return inputID(newID);
+		else return currentID;		
 }
-function goDown(currentID)
+function moveDown(currentID)
 {
 	var $parentTd = $("#"+parentTdID( currentID ));
 	var currentIndex = $parentTd.index();
+	var newID;
+	if ( inClue(currentID) )
+	{
+		$nextClue = $parentTd.closest("div.clue").next();
+		if ($nextClue.exists()) {
+			console.log("got next clue");
+			// get the id of the TD element to be consistent with the other case
+			newID = $nextClue.find("td").first().attr("id");
+			console.log("newID="+newID);
+		}		
+	
+	}
+	else {
+		// move up a row in the quote (but will only work if there is an input field)
+		var $nextRow = $parentTd.closest("tr").next();
+		if ($nextRow.exists())
+		{
+			console.log("index ="+currentIndex);
+			newID = $nextRow.children().eq(currentIndex).attr("id");		
+			
+		}
+		
+	}
+	// Returning the id of the TD element to be consistent across both
+		if (newID) return inputID(newID);
+		else return currentID;	
 }
 
 function moveCursor( arrowKey, currentID ) {
@@ -223,24 +281,51 @@ function moveCursor( arrowKey, currentID ) {
 	} 					
 }
 
+function updateInputs( startValue, inputValue, id ) {
+	console.log("startValue="+startValue);
+	var selector = "[id$=i"+idVal(id)+"]";
+	var $currentInputs = $("input"+selector);
+	//var highlighted = $( "table input.highlight_text");
+	// dehighlight previously highlighted texts
+	$( "table input.highlight_text").toggleClass("highlight_text",false);
+	if (startValue != inputValue) {
+		$currentInputs.toggleClass("highlight_text",true);
+	} 
+	
+	$currentInputs.each( function() {
+							$(this).val(inputValue);
+												});					
+}
 
 
+var startValue;
 
 $(document).ready(function()
 {
-	var startValue;
+	
 	$("#clues-div a.clue_id").on("click", function() {
-		var selected = $( "table input.display_bright");
-		selected.toggleClass("display_bright",false);
+		//var selected = $( "table# input.display_bright");
+		//selected.toggleClass("display_bright",false);
 		// ignore the "clue_"  
 		var clueID = $(this).attr("id").substr(5);
-		$("table#quote input."+clueID).toggleClass("display_bright",true);
+		$("table#quote li.link_"+clueID).toggleClass("display_link");
+		
+		if ( !($(this).hasClass("pressed")) )
+		{
+			var $pressed = $("a.pressed");
+			var isPressed = $pressed.exists();
+		}
+		$(this).toggleClass("pressed");
+		// Only have one button pressed at a time
+		if (isPressed)
+			$pressed.click();
 	});
 	$( "table" ).on( {	click: function() {
 								this.select();
 							},
 						focusin: function() {		
-							var startValue = $(this).val();
+							
+							console.log("startValue="+startValue);
 							//console.log("FOCUSIN: value=["+content+"]");				
 							lastCursorPosition($(this).getCursorPosition());
 							var id = $(this).attr("id");
@@ -264,23 +349,73 @@ $(document).ready(function()
 							console.log("focusout event");
 							$(this).css("color","black");
 						},
-						keyup: function() {
-							var keyValue = $(this).val().toUpperCase();
-							var id = $(this).attr("id");
-							var selector = "[id$=i"+idVal(id)+"]";
-							var $currentInputs = $("input"+selector);
-							//var highlighted = $( "table input.highlight_text");
-							// dehighlight previously highlighted texts
-							$( "table input.highlight_text").toggleClass("highlight_text",false);
-							if (startValue != keyValue) {
-								$currentInputs.toggleClass("highlight_text",true);
-							} 
-							
-							$currentInputs.each( function() {
-													$(this).val(keyValue);
-												});
-												
-							
+						keyup: function(event) {
+						
+							var content = $(this)[0].value;
+							var whichKey = event.which;
+							var cursorPosition = $(this).getCursorPosition();
+								// treat character keys as arrows
+								
+								//if( whichKey >36 && (whichKey < 41) ){
+											
+							switch (whichKey)
+							{
+								// After a backspace, go to previous element
+								case 8: updateInputs( startValue,"",$(this).attr("id"));
+										
+								case 37: 
+									//if (cursorPosition <= lastCursorPosition()) {
+										console.log("Going to previous input");									
+										
+										previous = "#" +  backspaceCursor($(this).attr("id"));
+										console.log("PreviousID="+previous);
+										$(previous).select();
+										//console.log("SELECT: keywhich[" + whichKey +"]");
+									//};
+									break;
+								case 32:
+									// Treat a blank as a way of advancing to the next position. Don't erase the character
+									$(this).val(startValue);
+								case 39:
+									
+									
+									console.log("Going to next input");
+									console.log("SELECT: keywhich[" + whichKey +"]");
+									
+									next = "#"+advanceCursor($(this).attr("id"));
+									$(next).select();
+									
+									break;
+								case 38 :
+									var upperTd = "#"+moveUp($(this).attr("id"));
+									console.log("upperTD="+upperTd);
+									$(upperTd).select();
+									break;
+								case 40:
+									var lowerTd = "#"+moveDown($(this).attr("id"));
+									console.log("lowerTD="+lowerTd);
+									$(lowerTd).select();
+									break;
+								
+								default:
+									var inputValue = $(this).val().toUpperCase();
+									
+									// Only allow letters to be used as input
+									if( cursorPosition>0)	{
+										if (whichKey >64 && (whichKey < 91)){
+											updateInputs(startValue, inputValue, $(this).attr("id"));
+											next = "#"+advanceCursor($(this).attr("id"));
+											$(next).select();
+										}
+										else {
+											// Don't allow other characters
+											$(this).val(startValue);
+											$(this).select();
+										}
+									}
+									// If the cursor is at 0, then it's possible something was deleted
+									else updateInputs(startValue, inputValue, $(this).attr("id"));
+							} 														
 						},
 						
 						change: function() {
@@ -303,11 +438,13 @@ $(document).ready(function()
 							},
 													
 						keydown : function(event) {
+							startValue = $(this).val();	
 							var content = $(this)[0].value;
 							var whichKey = event.which;
 							var cursorPosition = $(this).getCursorPosition();
 							
 							console.log( "KEYDOWN: content = <" + content +"> caret = <" +  cursorPosition + "> keywhich[" + whichKey +"]");
+							
 							//};
 							/*
 							if (whichKey >64 && (whichKey < 91) )
@@ -332,7 +469,7 @@ $(document).ready(function()
 						
 					}, "input" );	
 	
-
+	/*
 	$("table#quote,table.clue").on({ 	
 							
 							
@@ -343,11 +480,13 @@ $(document).ready(function()
 								var whichKey = event.which;
 								var cursorPosition = $(this).getCursorPosition();
 								// treat character keys as arrows
+								
 								if( whichKey >36 && (whichKey < 41) ){
 												
 									switch (whichKey)
 									{
-										case 37: 
+										
+										case 8,37: 
 											//if (cursorPosition <= lastCursorPosition()) {
 												console.log("Going to previous input");									
 												
@@ -364,11 +503,7 @@ $(document).ready(function()
 												//currentKey = $(this).closest("td").attr("id");
 												//nextKey=  "#" + currentKey.substring(0,3) + (Number(currentKey.substring(3))+1);
 												//$(nextKey + " input").select();
-												/************
-												currentID = $(this).attr("id");
-												next = "#" + idPrefix(currentID) + Math.min( idVal(currentID)+1,Solution().length-1);
 												
-												***************/
 												next = "#"+advanceCursor($(this).attr("id"));
 												$(next).select();
 											//};
@@ -413,7 +548,7 @@ $(document).ready(function()
 								}
 								else 
 								{
-									var keyValue = $(this).val().toUpperCase;
+									//var keyValue = $(this).val().toUpperCase;
 									if(cursorPosition > 0 )
 									
 									{
@@ -432,6 +567,7 @@ $(document).ready(function()
 									
 										else {
 											// Don't allow other characters
+											$(this).value(startValue);
 											$(this).select();
 										}
 									}	
@@ -444,15 +580,15 @@ $(document).ready(function()
 								*/
 								
 								//console.log("KEYUP: content = <" + content +"> caret = " + $(this).getCursorPosition());	
-							},
+/*							},
 							
 							keypress : function(event){
 								var whichKey = event.which;
 								console.log("KEYPRESS=>keycode["+event.keyCode+"] keywhich[" + whichKey) +"]";
 								
 							}						
-						},
-						"input");
+						}, */
+						
 });
 			
 		

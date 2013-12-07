@@ -4,8 +4,8 @@ body{
 	
 	#clues-div {
 		overflow-y: scroll;
-		margin-right: 5%
-		margin-left: 5%;
+		margin-right: 5%;
+		/*margin-left: 5%;*/
 		height: 60%;
 	}
 	#quote-div  table{
@@ -14,14 +14,14 @@ body{
 	
 	table{
 		border-collapse: collapse;
-		//table-layout: fixed;
+		/*table-layout: fixed;*/
 		text-align: center;
 		overflow-x: scroll;
 		background-color: green;
 	}
 	td {
-		//padding: 0px;
-		//margin: 0px;
+		/*padding: 0px;
+		margin: 0px;*/
 		border: 1px black solid;
 		height: 1.5em;
 		min-height: 1.5em;
@@ -29,17 +29,17 @@ body{
 		min-width: 1.2em;
 		width: 1.2em;
 		padding-top: 0%;
-		//background-color: orange;
+		/*background-color: orange;*/
 	}
 	
 	ul {
 		list-style:none;
-		//border: thin solid green;
-		list-style-position:inside;
+		/*border: thin solid green;*/
+		list-style-position: inside;
 
 		padding-left: 0px;
 		padding-right: 0px;
-		//width: 2em;
+		/*width: 2em;*/
 		text-align: center;
 		margin: auto;
 		width: 100%;
@@ -49,17 +49,17 @@ body{
 		padding: 0px;
 	}
 	li {
-		//border: thin solid red;
+		/*border: thin solid red;*/
 		padding: 0px;
 		padding-right: 0px;
 		margin: 0px 0px 0px 0px;
 		margin-left: 0px;
-		//min-width: 1.5em;
+		/*min-width: 1.5em;
 		//width: 1.5em;
 		//line-height: 1em;
 		//font-size: 1em;
 		//height: 1em;
-		//font-weight: bold;
+		//font-weight: bold;*/
 	}
 	#quote ul{
 		background-color: white;
@@ -72,7 +72,7 @@ body{
 		height: 1em;
 		line-height: 100%;
 		background-color: white;
-		//background-color: cyan;
+		/*background-color: cyan;*/
 		color: navy;
 		text-align: left;
 	}
@@ -97,48 +97,54 @@ body{
 		min-width: .8em;
 		width : .8em;
 		padding-right: .2em;
-		//text-align:right;
+		/*text-align:right;*/
 	}
 	tr.position {
-		//background-color: cyan;
+		
 		font-weight: bold;
 		font-size: 60%;
+		/*background-color: cyan;
 		//border-bottom: 0px;
 		//border-left: 0px;
 		//border-right: 0px;
-		//height: 1em;
+		//height: 1em;*/
 		
 	}
 
-	table.clue {
-		background-color: white;
-		border: 1px solid blue;
-		border-collapse: separate;
-		border-spacing: .3em 0em;
-		overflow-x: scrollable;
-	}
+	
+	
+	
 	
 	a.clue_id{
 		display: block;
 		float: left;
 		min-width: 1em;
 		width: 2em;
-		//height: 2em;
-		background-color: orange;
-		
-		font-weight: bold;
-		text-align: center;
-		//border-bottom: 0px;
-		
-	}
-	a.clue_id {
-		//vertical-align: bottom;
-		//padding: .3em;
 		margin-right: .5em;
 		font-size: 110%;
 		padding: .2em .1em .2em .2em;
-		border-style: ridge green 3px;
+		border: outset gray 2px;
+		background-color: #FF6600;
+		//vertical-align: bottom;
+		font-weight: bold;
+		text-align: center;
+		/*height: 2em;
+		vertical-align: text-bottom;
+		//border-bottom: 0px;
+	
+		
+		//padding: .3em;
+		
+		
+		*/
+		
 	}
+	
+	a.pressed {
+		border: inset black 2px;
+		background-color: #FF944D;
+	}
+	
 	a.clue_id:active, a.clue_id:hover {
 		color: yellow;
 	}
@@ -146,17 +152,22 @@ body{
 		color: black;
 		text-decoration: none;
 	}
-	div.clue p {
-		margin-top: 0px;
-		font-size: 90%;
 	
-	}
+	/*
 	table.clue>caption {
 		font-size: 90%;
 	}
-
+	*/
 	table#quote  ul{
 		font-weight: bold;
+	}
+	table.clue {
+		background-color: white;
+		border: 1px solid blue;
+		border-collapse: separate;
+		border-spacing: .3em 0em;
+		overflow-x: scroll;
+		margin-top: 0px;
 	}
 	
 	table.clue td {
@@ -167,14 +178,14 @@ body{
 		background-color: cyan;
 		font-weight: bold;
 		font-family: sans-serif;
-		//padding: 0px;
+		/*padding: 0px;*/
 		text-align: left;
 	}
 
 
 	input{
-		//background-color: yellow;
-		//border: solid cyan 1px;
+		/*background-color: yellow;
+		//border: solid cyan 1px;*/
 		border: 0px;
 		padding: 0px 0px 0px 0px;
 		margin: 0px 0px 0px 0px;
@@ -190,7 +201,7 @@ body{
 
 	
 	table.clue input {
-		//background-color: white;
+		/*background-color: white;*/
 		border-bottom: black 1px solid;
 		width: 1.4em;
 		min-width: 1.4em;
@@ -202,6 +213,11 @@ body{
 		font-style: italic;
 		font-weight: normal;
 	}
+	
+	table#quote li.display_link {
+		background-color: #FF3300;
+		color: white;
+	}
 
 	#clues {
 
@@ -210,11 +226,20 @@ body{
 		//background-color: orange;
 	}
 
-	td .highlight {
+	td .highlight,input.highlight{
 		background-color:#FF9999;
+	}
+	
+	::selection {
+		background-color: #FF9999;
+		color: green;
 	}
 	input.highlight_text {
 		color: #CC0000;
+	}
+	
+	input: selected {
+		background-color: #FF9999;
 	}
 	
 	table .display_bright {
@@ -222,19 +247,41 @@ body{
 	}
 
 	div.clue{
-		//border :orange 2px solid;
-		width: 45%;
+		
+		width: 48%;
+		
+		/*
+		border :orange 2px solid;
 		//background-color: navy;
 		//display: in-line;
 		//float: left;
+		*/
+		display: inline-block;
+		text-align: left;
+		margin-left: 0px;
+		margin-top: .75em;
+	}
+	div.clue p {
+		margin-top: 0px;
+		font-size: 90%;
+		border: 1px yellow solid;
+		margin-bottom: .5em;
+	}
+	span.hint {
+		/*vertical-align: bottom;
+		border: 1px green solid;
+		*/
+		padding: 0px;
+		padding-top: .4em;
+		
 		display: inline-block;
 	}
-
+	/*
 	div.clue table>caption {
 		width: 100%;
 		text-align: left;
 	}
-
+	*/
 	div.clue table {
 		//margin-left: 10%;
 		text-align: center;
